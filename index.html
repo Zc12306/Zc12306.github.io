@@ -147,6 +147,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/22/%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%8A%A0%E5%AF%86%E5%92%8C%E5%AF%86%E9%92%A5%E4%BA%A4%E6%8D%A2%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Zc12306">
+      <meta itemprop="description" content="s8lmh">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zc's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/05/22/%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%8A%A0%E5%AF%86%E5%92%8C%E5%AF%86%E9%92%A5%E4%BA%A4%E6%8D%A2%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">基本的加密和密钥交换方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-05-22 22:01:14" itemprop="dateCreated datePublished" datetime="2024-05-22T22:01:14+08:00">2024-05-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-05-24 22:12:43" itemprop="dateModified" datetime="2024-05-24T22:12:43+08:00">2024-05-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/crytography/" itemprop="url" rel="index"><span itemprop="name">crytography</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Diffie–Hellman密钥交换"><a href="#Diffie–Hellman密钥交换" class="headerlink" title="Diffie–Hellman密钥交换"></a>Diffie–Hellman密钥交换</h1><h2 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h2><p>1、有两个全局公开的参数，一个素数q和一个整数a，a是q的一个原根。</p>
+<p>2、假设用户A和B希望交换一个密钥，用户A选择一个作为私有密钥的随机数XA&lt; q，并计算公开密钥YA&#x3D;a^XA mod q。A对XA的值保密存放而使YA能被B公开获得。类似地，用户B选择一个私有的随机数XB&lt; q，并计算公开密钥YB&#x3D;a^XB mod q。B对XB的值保密存放而使YB能被A公开获得。</p>
+<p>3、用户A产生共享秘密密钥的计算方式是K &#x3D; (YB)^XA mod q。同样，用户B产生共享秘密密钥的计算是K &#x3D; (YA)^XB mod q。这两个计算产生相同的结果：<br><img src="https://img-blog.csdn.net/20160630151113124" alt="结果图示"><br>              K &#x3D; (YB)XA modq</p>
+<pre><code>            = (aXB modq)XA mod q
+
+            = (aXB)XA modq                  （根据取模运算规则得到）
+
+            = aXBXA modq
+
+            = (aXA)XB modq
+
+            = (aXA modq)XB mod q
+
+            = (YA)XB modq
+</code></pre>
+<p>所以 (YB)XA modq &#x3D; K &#x3D;(YA)XB modq</p>
+<p>因此相当于双方已经交换了一个相同的秘密密钥。</p>
+<p>4、因为XA和XB是保密的，一个敌对方可以利用的参数只有q、a、YA和YB。因而敌对方被迫取离散对数来确定密钥。例如，要获取用户B的秘密密钥，敌对方必须先计算</p>
+<pre><code>           XB = inda ,q(YB)
+</code></pre>
+<p>然后再使用用户B采用的同样方法计算其秘密密钥K。</p>
+<p>Diffie-Hellman算法具有两个吸引力的特征：</p>
+<p>1、仅当需要时才生成密钥，减小了将密钥存储很长一段时间而致使遭受攻击的机会。</p>
+<p>2、除对全局参数的约定外，密钥交换不需要事先存在的基础结构。</p>
+<h2 id="算法存在的问题"><a href="#算法存在的问题" class="headerlink" title="算法存在的问题"></a>算法存在的问题</h2><p>1、没有提供双方身份的任何信息。</p>
+<p>2、它是计算密集性的，因此容易遭受阻塞性攻击，即对手请求大量的密钥。受攻击者花费了相对多的计算资源来求解无用的幂系数而不是在做真正的工作。</p>
+<p>3、没办法防止重演攻击。</p>
+<p>4、容易遭受中间人的攻击。第三方C在和A通信时扮演B；和B通信时扮演A。A和B都与C协商了一个密钥，然后C就可以监听和传递通信量。中间人的攻击按如下进行：</p>
+<p>（1）B在给A的报文中发送他的公开密钥。</p>
+<p>（2）C截获并解析该报文。C将B的公开密钥保存下来并给A发送报文，该报文具有B的用户ID但使用C的公开密钥YC，仍按照好像是来自B的样子被发送出去。A收到C的报文后，将YC和B的用户ID存储在一块。类似地，C使用YC向B发送好像来自A的报文。</p>
+<p>（3）B基于私有密钥XB和YC计算秘密密钥K1。A基于私有密钥XA和YC计算秘密密钥K2。C使用私有密钥XC和YB计算K1，并使用XC和YA计算K2。</p>
+<p>（4）从现在开始，C就可以转发A发给B的报文或转发B发给A的报文，在途中根据需要修改它们的密文。使得A和B都不知道他们在和C共享通信。</p>
+<h2 id="对Diffie-Hellman密钥交换算法的优化-Oakley算法"><a href="#对Diffie-Hellman密钥交换算法的优化-Oakley算法" class="headerlink" title="对Diffie-Hellman密钥交换算法的优化:Oakley算法"></a>对Diffie-Hellman密钥交换算法的优化:Oakley算法</h2><p>Oakley算法具有五个重要特征：</p>
+<p>1、它采用称为cookie程序的机制来对抗阻塞攻击。</p>
+<p>2、它使得双方能够协商一个全局参数集合。</p>
+<p>3、它使用了现时来保证抵抗重演攻击。</p>
+<p>4、它能够交换Diffie-Hellman公开密钥。</p>
+<p>5、它对Diffie-Hellman交换进行鉴别以对抗中间人的攻击。</p>
+<p>Oakley可以使用三个不同的鉴别方法：</p>
+<p>1、数字签名：通过签署一个相互可以获得的散列代码来对交换进行鉴别；每一方都使用自己的私钥对散列代码加密。散列代码是在一些重要参数上生成的，如用户ID和现时。</p>
+<p>2、公开密钥加密：通过使用发送者的私钥对诸如ID和现时等参数进行加密来鉴别交换。</p>
+<p>3、对称密钥加密：通过使用某种共享密钥对交换参数进行对称加密，实现交换的鉴别。</p>
+<p>这种算法的关键是在这个式中</p>
+<p>b&#x3D;ai mod p, 0&lt;&#x3D;i&lt;&#x3D;p-1</p>
+<p>如果知道a, i, p可以很方便的算出b的值，但是知道b, a, p的情况下想要算出i的值却非常难。所以如果只要突破这个点，就需要能在足够短的时间内算出i的值是多少。我相信不久的将来，随着量子计算机的发展，破解这种加密方式将不再是问题，任何一种依靠计算复杂度来保证数据安全性的加密方式都将会被淘汰，应运而生的将是更加先进可靠的加密方式。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/22/%E5%9F%BA%E6%9C%AC%E6%9C%AF%E8%AF%AD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -447,7 +565,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
